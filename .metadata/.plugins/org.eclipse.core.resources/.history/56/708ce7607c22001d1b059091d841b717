@@ -1,0 +1,46 @@
+package co.grandcircus.PracticeAss8;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HomeController {
+	@Autowired
+	private AnimalRepository repo;
+	
+	@GetMapping("/reset")
+	public String reset() {
+		// delete all
+		repo.deleteAll();
+		//add animals
+		Animal animal = new Animal("Belle", "cat", 16, new ArrayList<String>(Arrays.asList("Loves pizza", "Hungry", "Bowling Ball Shaped")));
+		repo.save(animal);
+		animal = new Animal("Boots", "cat", 10, new ArrayList<String>(Arrays.asList("Shy boy", "Loves treats", "Will run when the vibes are off")));
+		repo.save(animal);
+		animal = new Animal("Magnolia", "dog", 100, new ArrayList<String>(Arrays.asList("Loves to play ball", "Independent", "Chocolate Milk Cow")));
+		repo.save(animal);
+		return "Data reset";
+	}
+	@GetMapping("/animals")
+	public void getAllAnimals() {
+		
+	}
+	@GetMapping("/animals/{id}")
+	public void getOneAnimal(String id) {
+		
+	}
+	@PostMapping("/animals")//instructions said to have {id}
+	public void newAnimal() {
+		
+	}
+	@DeleteMapping("/animals/{id}")
+	public void deleteAnimal(String id) {
+		
+	}
+}

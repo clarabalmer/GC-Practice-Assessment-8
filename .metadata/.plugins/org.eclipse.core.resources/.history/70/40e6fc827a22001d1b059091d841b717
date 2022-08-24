@@ -1,0 +1,21 @@
+package co.grandcircus.PracticeAss8;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HomeController {
+	@Autowired
+	private AnimalRepository repo;
+	
+	@GetMapping("/reset") {
+		// delete all
+		repo.deleteAll();
+		//add animals
+		Animal animal = new Animal("Belle", "cat", 16, Arrays.asList("Loves pizza", "Hungry", "Bowling Ball Shaped"));
+	}
+}

@@ -1,0 +1,63 @@
+package co.grandcircus.PracticeAss8;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HomeController {
+	@Autowired
+	private AnimalRepository repo;
+	
+	@GetMapping("/reset")
+	public String reset() {
+		// delete all
+		repo.deleteAll();
+		//add animals
+		Animal animal = new Animal("Belle", "cat", 16, new ArrayList<String>(Arrays.asList("Loves pizza", "Hungry", "Bowling Ball Shaped")));
+		repo.save(animal);
+		animal = new Animal("Boots", "cat", 10, new ArrayList<String>(Arrays.asList("Shy boy", "Loves treats", "Will run when the vibes are off")));
+		repo.save(animal);
+		animal = new Animal("Magnolia", "dog", 100, new ArrayList<String>(Arrays.asList("Loves to play ball", "Independent", "Chocolate Milk Cow")));
+		repo.save(animal);
+		return "Data reset";
+	}
+	@GetMapping("/animals")
+	public List<Animal> getAllAnimals() {
+		return repo.findAll();
+	}
+	@GetMapping("/animals/{id}")
+	public Animal getOneAnimal(@PathVariable String id) {
+		Optional<Animal> optAnimal = repo.findById(id);
+		return optAnimal.orElseThrow(() -> new AnimalNotFoundException(id));
+	}
+	@ResponseStatus(HttpStatus.CREATED)
+	@PostMapping("/animals")//instructions said to have {id}
+	public void newAnimal(@RequestBody Animal animal) {
+		
+	}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@DeleteMapping("/animals/{id}")
+	public void deleteAnimal(@PathVariable String id) {
+		
+	}
+	@ResponseBody
+	@ExceptionHandler(AnimalNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	String animalNotFoundHandler(AnimalNotFoundException ex) {
+		return ex.getMessage();
+	}
+}
